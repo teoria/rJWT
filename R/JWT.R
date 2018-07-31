@@ -8,7 +8,7 @@ JWT <- R6Class("JWT",
 
                   public = list(
 
-                          timestamp = null,
+                          timestamp = NULL,
                           supported_algs = list(
                                   HS256 = c('hash_hmac', 'SHA256'),
                                   HS512 = c('hash_hmac', 'SHA512'),
@@ -49,6 +49,43 @@ JWT <- R6Class("JWT",
 
                           verify = function (msg, signature, key, alg)
                           {
+                                  if ( is.null( self$supported_algs[[alg]] )  ) {
+                                          stop('Algorithm not supported');
+                                  }
+
+                                  type = self$supported_algs[[alg]]
+
+                                  switch( type[0]){
+                                        #   case 'openssl':
+                                        #           $success = openssl_verify($msg, $signature, $key, $algorithm);
+                                        #           if ($success === 1) {
+                                        #                   return true;
+                                        #           } elseif ($success === 0) {
+                                        #                   return false;
+                                        #           }
+                                        #           // returns 1 on success, 0 on failure, -1 on error.
+                                        #           throw new DomainException(
+                                        #                   'OpenSSL error: ' . openssl_error_string()
+                                        #           );
+                                        # case 'hash_hmac':
+                                        #                   default:
+                                        #                   $hash = hash_hmac($algorithm, $msg, $key, true);
+                                        #           if (function_exists('hash_equals')) {
+                                        #                   return hash_equals($signature, $hash);
+                                        #           }
+                                        #           $len = min(static::safeStrlen($signature), static::safeStrlen($hash));
+                                        #
+                                        #           $status = 0;
+                                        #           for ($i = 0; $i < $len; $i++) {
+                                        #                   $status |= (ord($signature[$i]) ^ ord($hash[$i]));
+                                        #           }
+                                        #           $status |= (static::safeStrlen($signature) ^ static::safeStrlen($hash));
+                                        #
+                                        #           return ($status === 0);
+                                  }
+
+                                  return(type)
+
                           },
 
                           jsonDecode = function (input)
@@ -69,7 +106,7 @@ JWT <- R6Class("JWT",
 
                                   json = toJSON(input);
                                   if (json == 'null' && !is.null(input) ) {
-
+                                        stop('Json Error');
                                   }
                                   return (json);
                           },
@@ -136,5 +173,6 @@ JWT <- R6Class("JWT",
 
 
 ann <- JWT$new("Ann", "black")
+ann$verify("qe","qwe","qwe","HS512")
 
 
