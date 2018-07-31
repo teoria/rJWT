@@ -9,14 +9,14 @@ JWT <- R6Class("JWT",
                   public = list(
 
                           timestamp = null,
-                          supported_algs = array(
-                                  'HS256' => array('hash_hmac', 'SHA256'),
-                                  'HS512' => array('hash_hmac', 'SHA512'),
-                                  'HS384' => array('hash_hmac', 'SHA384'),
-                                  'RS256' => array('openssl', 'SHA256'),
-                                  'RS384' => array('openssl', 'SHA384'),
-                                  'RS512' => array('openssl', 'SHA512'),
-                          );
+                          supported_algs = list(
+                                  HS256 = c('hash_hmac', 'SHA256'),
+                                  HS512 = c('hash_hmac', 'SHA512'),
+                                  HS384 = c('hash_hmac', 'SHA384'),
+                                  RS256 = c('openssl', 'SHA256'),
+                                  RS384 = c('openssl', 'SHA384'),
+                                  RS512 = c('openssl', 'SHA512')
+                          ),
 
                           name = NULL,
                           hair = NULL,
