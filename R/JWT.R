@@ -53,7 +53,10 @@ JWT <- R6Class("JWT",
 
                           jsonDecode = function (input)
                           {
+                                  require( jsonlite)
 
+                                  obj = fromJSON(input)
+                                  return (obj)
                           },
 
                           jsonEncode = function (input)
