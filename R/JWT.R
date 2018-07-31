@@ -58,13 +58,17 @@ JWT <- R6Class("JWT",
 
                           jsonEncode = function (input)
                           {
-                                  $json = json_encode($input);
-                                  if (function_exists('json_last_error') && $errno = json_last_error()) {
-                                          static::handleJsonError($errno);
-                                  } elseif ($json === 'null' && $input !== null) {
-                                          throw new DomainException('Null result with non-null input');
+                                  require( jsonlite)
+
+                                  if(missing(input)){
+                                          stop('Null input');
                                   }
-                                  return $json;
+
+                                  json = toJSON(input);
+                                  if (json == 'null' && !is.null(input) ) {
+
+                                  }
+                                  return (json);
                           },
 
                           urlsafeB64Decode = function (input)
