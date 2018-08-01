@@ -1,5 +1,23 @@
+.onLoad <- function(libname, pkgname) {
+        op <- options()
+        op.devtools <- list(
+                devtools.path = "~/R-dev",
+                devtools.install.args = "",
+                devtools.name = "Rodrigo Carneiro",
+                devtools.desc.author = "Rodrigo Carneiro<teoria@gmail.com> [aut, cre]",
+                devtools.desc.license = "GNU",
+                devtools.desc.suggests = NULL,
+                devtools.desc = list()
+        )
+        toset <- !(names(op.devtools) %in% names(op))
+        if(any(toset)) options(op.devtools[toset])
 
+        invisible()
+}
 
+.onAttach <- function(libname, pkgname) {
+        packageStartupMessage("Welcome to rJWT - JWT.io")
+}
 
 
 library(R6)
@@ -55,7 +73,16 @@ JWT <- R6Class("JWT",
 
                                   type = self$supported_algs[[alg]]
 
-                                  switch( type[0]){
+                                  switch( type[1],
+
+                                          openssl = 1
+
+                                          )
+
+
+
+
+                                  {
                                         #   case 'openssl':
                                         #           $success = openssl_verify($msg, $signature, $key, $algorithm);
                                         #           if ($success === 1) {
@@ -67,21 +94,21 @@ JWT <- R6Class("JWT",
                                         #           throw new DomainException(
                                         #                   'OpenSSL error: ' . openssl_error_string()
                                         #           );
-                                        # case 'hash_hmac':
-                                        #                   default:
-                                        #                   $hash = hash_hmac($algorithm, $msg, $key, true);
-                                        #           if (function_exists('hash_equals')) {
-                                        #                   return hash_equals($signature, $hash);
-                                        #           }
-                                        #           $len = min(static::safeStrlen($signature), static::safeStrlen($hash));
-                                        #
-                                        #           $status = 0;
-                                        #           for ($i = 0; $i < $len; $i++) {
-                                        #                   $status |= (ord($signature[$i]) ^ ord($hash[$i]));
-                                        #           }
-                                        #           $status |= (static::safeStrlen($signature) ^ static::safeStrlen($hash));
-                                        #
-                                        #           return ($status === 0);
+                                       # # case 'hash_hmac':
+                                       #         default:
+                                       #                     $hash = hash_hmac($algorithm, $msg, $key, true);
+                                       #             if (function_exists('hash_equals')) {
+                                       #                     return hash_equals($signature, $hash);
+                                       #             }
+                                       #             $len = min(static::safeStrlen($signature), static::safeStrlen($hash));
+                                       #
+                                       #             $status = 0;
+                                       #             for ($i = 0; $i < $len; $i++) {
+                                       #                     $status |= (ord($signature[$i]) ^ ord($hash[$i]));
+                                       #             }
+                                       #             $status |= (static::safeStrlen($signature) ^ static::safeStrlen($hash));
+                                       #
+                                       #             return ($status === 0);
                                   }
 
                                   return(type)
@@ -129,7 +156,6 @@ JWT <- R6Class("JWT",
 
                           urlsafeB64Encode = function (input)
                           {
-                                #  return str_replace('=', '', strtr( base64_encode($input), '+/', '-_'));
                                   require(stringr);
                                   require(base64enc)
 
@@ -169,10 +195,4 @@ JWT <- R6Class("JWT",
                        }
                )
 )
-
-
-
-ann <- JWT$new("Ann", "black")
-ann$verify("qe","qwe","qwe","HS512")
-
 
