@@ -73,13 +73,14 @@ JWT <- R6Class("JWT",
 
                                   type = self$supported_algs[[alg]]
 
-                                  switch( type[1],
+                                  resp = switch( type[1],
 
-                                          openssl = 1
-
+                                          openssl = 1,
+                                          hash_hmac = 2,
+                                          "Otherwise: last"
                                           )
 
-
+                                return(resp)
 
 
                                   {
